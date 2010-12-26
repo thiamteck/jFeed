@@ -10,7 +10,8 @@ jQuery.getFeed = function(options) {
     
         url: null,
         data: null,
-        success: null
+        success: null,
+        error: null
         
     }, options);
 
@@ -24,6 +25,9 @@ jQuery.getFeed = function(options) {
             success: function(xml) {
                 var feed = new JFeed(xml);
                 if(jQuery.isFunction(options.success)) options.success(feed);
+            },
+            error: function(xmlRequest,textStatus,error){
+                if(jQuery.isFunction(options.error))options.error(textStatus,error)
             }
         });
     }
@@ -94,7 +98,17 @@ JAtom.prototype = {
             var item = new JFeedItem();
             
             item.title = jQuery(this).find('title').eq(0).text();
+            item.link = jQuery(this).find('feedburner\\:origLink').text();
+            
+            if(item.link == null || item.link == ""){
+                item.link = jQuery(this).find('link').filter('[rel=replies][type=text/html]').eq(0).attr('href');
+            }
+            
+            if(item.link == null || item.link == ""){
             item.link = jQuery(this).find('link').eq(0).attr('href');
+            }
+            
+            
             item.description = jQuery(this).find('content').eq(0).text();
             item.updated = jQuery(this).find('updated').eq(0).text();
             item.id = jQuery(this).find('id').eq(0).text();

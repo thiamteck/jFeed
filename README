@@ -14,13 +14,19 @@ Usage
     * data: data to be sent to the server. See jQuery.ajax data property.
     * success: a function to be called if the request succeeds.
       The function gets passed one argument: the JFeed object.
-    
+    * error: a function to be called if the request fails.
+      The function get passed two argument: 
+      a string describing the type of error that occurred (Possible values (besides null) are "timeout", "error", "notmodified" and "parsererror")
+      , and an optional exception object
     Example:
     
     jQuery.getFeed({
         url: 'rss.xml',
         success: function(feed) {
             alert(feed.title);
+        }
+        error: function(textStatus, error) {
+			alert(textStatus); 
         }
     });
     

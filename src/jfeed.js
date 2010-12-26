@@ -10,7 +10,8 @@ jQuery.getFeed = function(options) {
     
         url: null,
         data: null,
-        success: null
+        success: null,
+        error: null
         
     }, options);
 
@@ -24,6 +25,9 @@ jQuery.getFeed = function(options) {
             success: function(xml) {
                 var feed = new JFeed(xml);
                 if(jQuery.isFunction(options.success)) options.success(feed);
+            },
+            error: function(xmlRequest,textStatus,error){
+                if(jQuery.isFunction(options.error))options.error(textStatus,error)
             }
         });
     }
